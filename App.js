@@ -58,10 +58,15 @@ const renderItem = ({ item, index }) => (
 
 const App: () => React$Node = () => {
 
+  // Teams' round score
   const [scoreA, setScoreA] = useState(0);
   const [scoreB, setScoreB] = useState(0);
+  // Array to store every point of each team.
+  // Template: [(points of teamA tricks), (points of teamA calls <tichu/grand tichu>), (points of teamB tricks), (points of teamB calls <tichu/grand tichu>)]
   const [allScores, setAllScores] = useState([0, 0, 0, 0]);
+  // Teams' score list (FUTURE USE: add to database)
   const [scoreList, setScoreList] = useState([{id: 0, teamA: 0, teamB: 0}]);
+  // Total games currently played
   const [totalGames, setTotalGames] = useState(1);
   
   const addScoreGT = function(amount, team) {
@@ -108,10 +113,11 @@ const App: () => React$Node = () => {
 
       <View style={{ flex: 3 }}>
         <FlatList
+                             ref={ref => this.flatList = ref}
               data={scoreList}
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
-              onContentSizeChange={() => this.scrollToEnd()}
+              onContentSizeChange={() => (this.flatList.scrollToEnd())}
         />
       </View>
 
