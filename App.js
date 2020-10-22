@@ -86,6 +86,10 @@ const App: () => React$Node = () => {
     setScoreB(100 - allScores[0] + allScores[3]);
   }
 
+  if (this.flatList) {
+    setTimeout(() => this.flatList.scrollToEnd({animated: true}), 150)
+  }
+
   return (
     <SafeAreaView style = {styles.container}>
 
@@ -110,6 +114,7 @@ const App: () => React$Node = () => {
         <FlatList
               data={scoreList}
               renderItem={renderItem}
+              ref={ref => this.flatList = ref}
               keyExtractor={(item, index) => index.toString()}
               onContentSizeChange={() => this.scrollToEnd()}
         />
