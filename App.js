@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -58,6 +58,8 @@ const renderItem = ({ item, index }) => (
 
 const App: () => React$Node = () => {
 
+  let flatList = useRef(null);
+
   // Teams' round score
   const [scoreA, setScoreA] = useState(0);
   const [scoreB, setScoreB] = useState(0);
@@ -113,11 +115,11 @@ const App: () => React$Node = () => {
 
       <View style={{ flex: 3 }}>
         <FlatList
-                             ref={ref => this.flatList = ref}
+              ref={flatList}
               data={scoreList}
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
-              onContentSizeChange={() => (this.flatList.scrollToEnd())}
+              onContentSizeChange={() => (flatList.current.scrollToEnd())}
         />
       </View>
 
@@ -209,6 +211,16 @@ const App: () => React$Node = () => {
             setScoreB(0);
             setAllScores([0,0,0,0]);
           }}/>
+          </View>
+          <View style={styles.footerButtons}>
+            <CustomButton title='reset' onPress={() => {
+              setScoreList([{id: 0, teamA: 0, teamB: 0}]);
+              setScoreA(0);
+              setScoreB(0);
+              setAllScores([0,0,0,0]);
+              setTotalGames(1);
+            }} />
+
           </View>
         </View>
 
