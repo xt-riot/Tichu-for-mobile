@@ -23,6 +23,8 @@ const App: () => React$Node = () => {
   const [scoreList, setScoreList] = useState([{id: 0, teamA: 0, teamB: 0}]);
   // Total games currently played
   const [totalGames, setTotalGames] = useState(1);
+  const [buttonState, setButtonState] = useState(false);
+  const [col, setColor] = useState(['white', 'white']);
 
   const addScoreButton = () => {
     scoreList[0].teamA += scoreA;
@@ -37,16 +39,20 @@ const App: () => React$Node = () => {
     setScoreA(0);
     setScoreB(0);
     setAllScores([0,0,0,0]);
+    setButtonState(false);
+    setColor(['white', 'white']);
   }
 
   const RemoveRoundButton = () => {
-    scoreList[0].teamA -= scoreList[totalGames-1].teamA;
-            scoreList[0].teamB -= scoreList[totalGames-1].teamB;
-            setScoreList(scoreList.slice(0,-1));
-            setTotalGames(totalGames-1);
-            setScoreA(0);
-            setScoreB(0);
-            setAllScores([0,0,0,0]);
+    if(totalGames>1) {
+      scoreList[0].teamA -= scoreList[totalGames-1].teamA;
+        scoreList[0].teamB -= scoreList[totalGames-1].teamB;
+        setScoreList(scoreList.slice(0,-1));
+        setTotalGames(totalGames-1);
+        setScoreA(0);
+        setScoreB(0);
+        setAllScores([0,0,0,0]);
+    }
   }
 
   const ResetButton = () => {
@@ -57,11 +63,33 @@ const App: () => React$Node = () => {
               setTotalGames(1);
   }
 
+  const doubleVictory = (team) => {
+    setButtonState(true);
+    if (team === 0 && allScores[0] === 200 || team === 1 && allScores[2] === 200) {
+      allScores[0] = 0;
+      allScores[2] = 0;
+      setColor(['white', 'white']);
+      setButtonState(false);
+    }
+    else if(team === 0) {
+      allScores[0] = 200;
+      allScores[2] = 0;
+      setColor(['green', 'white']);
+    }
+    else if (team === 1) {
+      allScores[0] = 0;
+      allScores[2] = 200;
+      setColor(['white', 'green']);
+    }
+    setScoreA(allScores[0] + allScores[1]);
+    setScoreB(allScores[2] + allScores[3]);
+  }
+
   const addScoreGT = (amount, team) => {
     if ( allScores[(team * 2) + 1] + amount < 201 && allScores[(team * 2) + 1] + amount > -301) {
       allScores[(team * 2) + 1] += amount;
       setScoreA(allScores[0] + allScores[1]);
-      setScoreB(100 - allScores[0] + allScores[3]);
+      setScoreB(allScores[2] + allScores[3]);
     }
   }
   
@@ -93,7 +121,7 @@ const App: () => React$Node = () => {
           </Text>
         </View>
 
-        <View style={{flex: 0.15, flexDirection: 'row'}}>
+        <View style={{flex: 0.3, flexDirection: 'row'}}>
           <Text style={styles.teams}> {scoreList[0].teamA} </Text>
           <Text style={styles.teams}> {scoreList[0].teamB} </Text>
 
@@ -104,7 +132,12 @@ const App: () => React$Node = () => {
         <CustomFlatList scores={scoreList} />
       </View>
 
-
+      <View style={{ flex: 0.5, flexDirection: 'row' }}>
+          <View style={{ flex:1, marginRight:10 }}>
+            <CustomButton title='Double Victory' color={col[0]} onPress={() => { doubleVictory(0)} } />
+          </View>
+          <CustomButton title='Double Victory' color={col[1]} onPress={() => {doubleVictory(1)} } />
+      </View>
       <View style={styles.bottomScreen}>
         <View style={{ flex: 1 }}>
           <CustomButton title='grand' color='green' onPress={() => {addScoreGT(200, 0)} } />
@@ -113,6 +146,7 @@ const App: () => React$Node = () => {
           <CustomButton title='tichu' color='red' onPress={() => {addScoreGT(-100, 0)} } />
         </View>
 
+        
         <View style={{ flex: 2, marginRight: 5}}>
         
           <View style={{flex: 1, justifyContent:'center'}}>
@@ -121,16 +155,16 @@ const App: () => React$Node = () => {
             </Text>
           </View>
           <View style={styles.pureScoreButtons}>
-            <CustomButton title='-5' onPress={() => {addScore(-5, 0)} } />
-            <CustomButton title='-10' onPress={() => {addScore(-10, 0)} } />
+            <CustomButton title='-5' disabled={buttonState} onPress={() => {addScore(-5, 0)} } />
+            <CustomButton title='-10' disabled={buttonState} onPress={() => {addScore(-10, 0)} } />
           </View>
           <View style={styles.pureScoreButtons}>
-            <CustomButton title='5' onPress={() => {addScore(5, 0)} } />
-            <CustomButton title='10' onPress={() => {addScore(10, 0)} } />
+            <CustomButton title='5' disabled={buttonState} onPress={() => {addScore(5, 0)} } />
+            <CustomButton title='10' disabled={buttonState} onPress={() => {addScore(10, 0)} } />
           </View>
           <View style={styles.pureScoreButtons}>
-            <CustomButton title='20' onPress={() => {addScore(20, 0)} } />
-            <CustomButton title='50' onPress={() => {addScore(50, 0)} } />
+            <CustomButton title='20' disabled={buttonState} onPress={() => {addScore(20, 0)} } />
+            <CustomButton title='50' disabled={buttonState} onPress={() => {addScore(50, 0)} } />
           </View>
         </View>
 
@@ -141,16 +175,16 @@ const App: () => React$Node = () => {
             </Text>
           </View>
           <View style={styles.pureScoreButtons}>
-            <CustomButton title='-5' onPress={() => {addScore(-5, 1)} } />
-            <CustomButton title='-10' onPress={() => {addScore(-10, 1)} } />
+            <CustomButton title='-5' disabled={buttonState} onPress={() => {addScore(-5, 1)} } />
+            <CustomButton title='-10' disabled={buttonState} onPress={() => {addScore(-10, 1)} } />
           </View>
           <View style={styles.pureScoreButtons}>
-            <CustomButton title='5' onPress={() => {addScore(5, 1)} } />
-            <CustomButton title='10' onPress={() => {addScore(10, 1)} } />
+            <CustomButton title='5' disabled={buttonState} onPress={() => {addScore(5, 1)} } />
+            <CustomButton title='10' disabled={buttonState} onPress={() => {addScore(10, 1)} } />
           </View>
           <View style={styles.pureScoreButtons}>
-            <CustomButton title='20' onPress={() => {addScore(20, 1)} } />
-            <CustomButton title='50' onPress={() => {addScore(50, 1)} } />
+            <CustomButton title='20' disabled={buttonState} onPress={() => {addScore(20, 1)} } />
+            <CustomButton title='50' disabled={buttonState} onPress={() => {addScore(50, 1)} } />
           </View>
         </View>
 
