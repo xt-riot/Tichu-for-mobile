@@ -8,10 +8,10 @@ import {
 const Item = ({ teamA, teamB, show }) => (
     <View style = {{flex: 1, flexDirection: 'row', justifyContent:'center', alignContent:'center', alignItems:'center'}}>
       <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-        <Text style={{color: 'white'}}>{(show > 0)?teamA:''}</Text>
+        <Text style={{color: 'white', fontSize: 15}}>{(show > 0)?teamA:''}</Text>
       </View>
       <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-        <Text style={{color: 'white'}}>{(show > 0)?teamB:''}</Text>
+        <Text style={{color: 'white', fontSize: 15}}>{(show > 0)?teamB:''}</Text>
       </View>
     </View>
   );

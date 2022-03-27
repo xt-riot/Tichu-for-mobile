@@ -112,7 +112,7 @@ const App: () => React$Node = () => {
     <SafeAreaView style = {styles.container}>
 
       <View style={{flex: 1, flexDirection:'column', justifyContent:'center', alignItems: 'center'}}>
-        <View style={{flex: 0.3, flexDirection: 'row'}}>
+        <View style={{flex: 0.4, flexDirection: 'row'}}>
           <Text style={styles.teams}>
               Team A 
           </Text>
@@ -226,7 +226,8 @@ const styles = StyleSheet.create({
   teams: {
     color:'white',
     flex: 1,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: 25
   },
   midScreen: {
 
