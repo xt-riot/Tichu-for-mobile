@@ -15,7 +15,7 @@ const CustomButton = ({ onPress, title, size, color, disabled }) => {
       underlayColor: 'grey'
     }}>
       <Text style={[{
-                      color: color,
+                      color: 'white',
                       padding:7,
                       fontWeight: 'bold',
                       alignSelf:'center',

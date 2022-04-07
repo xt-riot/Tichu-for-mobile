@@ -17,7 +17,7 @@ const Item = ({ teamA, teamB, show }) => (
   );
   
   const RenderItem = ({ item, index }) => (
-      <Item teamA={item.teamA} teamB={item.teamB} show={index} />
+      <Item teamA={item === '' ? '' : (item.score.team1 + 200*item.gtd.team1[0] + 100*item.gtd.team1[1] + 200*item.gtd.team1[2])} teamB={item === '' ? '' : item.score.team2 + 200*item.gtd.team2[0] + 100*item.gtd.team2[1] + 200*item.gtd.team2[2]} show={index} />
   );
 
 const CustomFlatList = (props) => {
