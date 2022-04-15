@@ -8,7 +8,8 @@ import {
   FlatList,
   TouchableOpacity,
   Pressable,
-  ScrollView
+  ScrollView,
+  AppState
 } from 'react-native';
 
 import CustomButton from './src/CustomButton';
@@ -33,13 +34,20 @@ const App: () => React$Node = () => {
       if (t === null) setDB([]);
       setGame(newRound(newGame()));
     }
-     firstLoad();
+    firstLoad();
    }, []);
 
    useEffect(() => {
      setColor(['white', 'white']);
      setButtonState(false);
    } ,[game]);
+
+  useEffect(() => {
+    const savedb = async () => {
+      await saveDatabase(db);
+    }
+    savedb();
+  }, [db]);
 
   const addScore = (amount, team) => {
     setGame(addScores(game, amount, team));
@@ -98,7 +106,7 @@ const App: () => React$Node = () => {
             style={styles.modal} 
             activeOpacity={1} 
             disabled={!modalVisible}
-            onPress={() => {setModalVisible(!modalVisible); console.log(db)}}>
+            onPress={() => {setModalVisible(!modalVisible);}}>
               <ScrollView 
                 directionalLockEnabled={true} 
                 style={styles.insideModal}>
@@ -124,12 +132,16 @@ const App: () => React$Node = () => {
           <CustomButton title='History' onPress={() => { setModalVisible(true); }} />
         </View>
         <View style={{flex: 0.4, flexDirection: 'row'}}>
+          <Pressable style={{flex: 1, flexDirection: 'row'}} onLongPress={() => {/*let temp = game; temp.data.names.team1 = 'riot'; setGame(temp); setColor(col); console.log(temp);*/}}>
+            <Text style={styles.teams}>
+                {game === undefined ? 'Team A' : game.data.names.team1} 
+            </Text>
+          </Pressable>
+          <Pressable style={{flex: 1, flexDirection: 'row'}}>
           <Text style={styles.teams}>
-              {game === undefined ? 'Team A' : game.data.names.team1} 
+              {game === undefined ? 'Team B' : game.data.names.team2} 
           </Text>
-          <Text style={styles.teams}>
-              {game === undefined ? 'Team A' : game.data.names.team2} 
-          </Text>
+          </Pressable>
         </View>
 
         <View style={{flex: 0.3, flexDirection: 'row'}}>
@@ -166,6 +178,9 @@ const App: () => React$Node = () => {
                 (game.data.rounds[0].score.team1 + 200*game.data.rounds[0].gtd.team1[0] + 100*game.data.rounds[0].gtd.team1[1] + 200*game.data.rounds[0].gtd.team1[2])
               }
             </Text>
+            <Text style={[{position:'absolute', left:'5%', padding:'2%', color:"#000"}, ( game !== undefined ? (game.data.rounds[0].gtd.team1[0] === 1) ? {backgroundColor: 'green'} : ((game.data.rounds[0].gtd.team1[0] === -1) ? {backgroundColor: 'red'} : {opacity: 0}) : {opacity: 0} )]}>G</Text>
+            <Text style={[{position:'absolute', left:'15%', padding:'2%', color:"#000"}, (  game !== undefined ? (game.data.rounds[0].gtd.team1[1] === 1) ? {backgroundColor: 'green'} : ((game.data.rounds[0].gtd.team1[1] === -1) ? {backgroundColor: 'red'} : {opacity: 0}) : {opacity: 0} )]}>{'T'}</Text>
+            <Text style={[{position:'absolute', left:'25%', padding:'2%', color:"#000"}, ( game !== undefined ? (game.data.rounds[0].gtd.team1[2] === 1) ? {backgroundColor: 'green'} : ((game.data.rounds[0].gtd.team1[2] === -1) ? {backgroundColor: 'red'} : {opacity: 0}) : {opacity: 0} )]}>{'D'}</Text>
           </View>
           <View style={styles.pureScoreButtons}>
             <CustomButton title='-5' disabled={buttonState} onPress={() => {addScore(-5, 0)} } />
@@ -188,6 +203,10 @@ const App: () => React$Node = () => {
                 (game.data.rounds[0].score.team2 + 200*game.data.rounds[0].gtd.team2[0] + 100*game.data.rounds[0].gtd.team2[1] + 200*game.data.rounds[0].gtd.team2[2])
               }
             </Text>
+            <Text style={[{position:'absolute', right:'25%', padding:'2%', color:"#000"}, ( game !== undefined ? (game.data.rounds[0].gtd.team2[0] === 1) ? {backgroundColor: 'green'} : ((game.data.rounds[0].gtd.team2[0] === -1) ? {backgroundColor: 'red'} : {opacity: 0}) : {opacity: 0} )]}>G</Text>
+            <Text style={[{position:'absolute', right:'15%', padding:'2%', color:"#000"}, (  game !== undefined ? (game.data.rounds[0].gtd.team2[1] === 1) ? {backgroundColor: 'green'} : ((game.data.rounds[0].gtd.team2[1] === -1) ? {backgroundColor: 'red'} : {opacity: 0}) : {opacity: 0} )]}>T</Text>
+            <Text style={[{position:'absolute', right:'5%', padding:'2%', color:"#000" }, ( game !== undefined ? (game.data.rounds[0].gtd.team2[2] === 1) ? { backgroundColor: 'green'} : ((game.data.rounds[0].gtd.team2[2] === -1) ? {backgroundColor: 'red'} : {opacity: 0}) : {opacity: 0} )]}>D</Text>
+          
           </View>
           <View style={styles.pureScoreButtons}>
             <CustomButton title='-5' disabled={buttonState} onPress={() => {addScore(-5, 1)} } />

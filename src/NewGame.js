@@ -27,6 +27,7 @@ export const addScores = (game, amount, team) => {
   switch(amount) {
     case 200: {
       game.data.rounds[0].gtd['team'+(1+team)][0] === -1 ? game.data.rounds[0].gtd['team'+(1+team)][0] = 0 : game.data.rounds[0].gtd['team'+(1+team)][0] = 1;
+      if(game.data.rounds[0].gtd['team'+(1+team)][1] === 1) game.data.rounds[0].gtd['team'+(1+team)][1] = 0;
       break;
     }
     case -200: {
@@ -35,6 +36,7 @@ export const addScores = (game, amount, team) => {
     }
     case 100: {
       game.data.rounds[0].gtd['team'+(1+team)][1] === -1 ? game.data.rounds[0].gtd['team'+(1+team)][1] = 0 : game.data.rounds[0].gtd['team'+(1+team)][1] = 1;
+      if(game.data.rounds[0].gtd['team'+(1+team)][0] === 1) game.data.rounds[0].gtd['team'+(1+team)][0] = 0;
       break;
     }
     case -100: {
@@ -48,6 +50,8 @@ export const addScores = (game, amount, team) => {
           game.data.rounds[0].score['team'+(1+idx)] = 0;
         } else {
           game.data.rounds[0].gtd['team'+(1+idx)][2] = 0;
+          if ( game.data.rounds[0].gtd['team'+(1+idx)][1] === 1) game.data.rounds[0].gtd['team'+(1+idx)][1] = 0;
+          if ( game.data.rounds[0].gtd['team'+(1+idx)][0] === 1) game.data.rounds[0].gtd['team'+(1+idx)][0] = 0;
           game.data.rounds[0].score['team'+(1+idx)] = 0;
         }
       });

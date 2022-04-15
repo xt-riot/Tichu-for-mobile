@@ -3,6 +3,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 export const deleteDatabase = async () => {
     let keys = await AsyncStorage.getAllKeys().catch( error => console.log(error) );
+    let results = await AsyncStorage.multiGet(keys);
+    console.log(results);
     if (keys !== null) await AsyncStorage.multiRemove(keys).catch( error => console.log(error) );
 };
 
